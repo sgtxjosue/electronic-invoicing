@@ -451,15 +451,27 @@ This endpoint is the main integration point where you will later:
     - `JWT_SECRET`
   - Disables schema auto-update and hides error details.
 
-### Environment Variables (Dev)
+### Connecting to MySQL – fields to replace
 
-Set at least the following before running locally:
+To point this project at **your own MySQL instance**, update the following:
 
-- `EINV_DB_USERNAME` – MySQL username
-- `EINV_DB_PASSWORD` – MySQL password
-- `JWT_SECRET` – sufficiently long random string for HMAC signing (aim for 32+ characters)
+- In `src/main/resources/application-dev.properties`:
+  - **Database URL** (`spring.datasource.url`):
+    - Replace `electronic_invoicing` with your DB name, and adjust host/port if needed, e.g.  
+      `spring.datasource.url=jdbc:mysql://<host>:<port>/<your_db_name>?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC`
+  - **Database username** (`spring.datasource.username`):
+    - Set env var `EINV_DB_USERNAME` to your MySQL user.
+  - **Database password** (`spring.datasource.password`):
+    - Set env var `EINV_DB_PASSWORD` to that user’s password.
+- In `src/main/resources/application-prod.properties`:
+  - **Database URL** (`spring.datasource.url` or `EINV_DB_URL` env var):
+    - Set `EINV_DB_URL` to your production JDBC URL (same format as above).
+  - **Database username/password**:
+    - Set `EINV_DB_USERNAME` and `EINV_DB_PASSWORD` to your production credentials.
+- For security:
+  - **JWT secret**: set env var `JWT_SECRET` to a long random string (32+ chars).
 
-Optionally override:
+Optional Hacienda-related overrides (both dev and prod):
 
 - `HACIENDA_AUTH_URL`
 - `HACIENDA_API_URL`
